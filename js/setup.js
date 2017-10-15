@@ -3,19 +3,27 @@ import {
     StyleSheet,
     Text,
     View,
-    Dimensions
+    Dimensions,
+    ListView,
 } from 'react-native';
 
 import Toolbar from './view/toolbar'
 import ItemView from './view/LotusItem'
+import {PullList} from 'react-native-pull'
 const {width, height} = Dimensions.get('window');
 export default class setup extends Component {
+    constructor(props){
+        super(props);
+        this.state={
+            dataSource:new ListView.DataSource({rowHasChanged:(r1,r2)=>r1!=r2}),
+        }
+    }
     render() {
         return (
             <View style={styles.container}>
                 <Toolbar/>
 
-                <ItemView>
+                <ItemView name="qqq" title="eee">
 
                 </ItemView>
             </View>
