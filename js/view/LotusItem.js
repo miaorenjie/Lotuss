@@ -10,7 +10,6 @@ import NetUtil from '../Util/NetUtil';
 const {width, height} = Dimensions.get('window');
 
 export default class LotusItem extends Component {
-
     // static propTypes = {
     //     image:PropTypes.string,
     //     name:PropTypes.string,
@@ -22,15 +21,33 @@ export default class LotusItem extends Component {
 
     constructor(props) {
         super(props);
-    }
-    render(){
+        this.state={
+            codeKey:'',
+            captchaData:'',
+        };
+        // this.NetUtil.getVerificationCode=NetUtil.getVerificationCode.bind(this);
 
-        var map=NetUtil.signature();
-        console.log(map.timestamp+'111');
-        NetUtil.get(NetUtil.HOST_URL+NetUtil.LOGIN_CODE_URL,null,{'ts':map.timestamp,'key':map.key,'token':map.token})
-            .then((responseData)=>{
-                        console.log(responseData);
-                    });
+    }
+    componentWillMount(){
+        var that=this;
+        NetUtil.getVerificationCode().then((response)=>{
+            that.setState({
+                codeKey:response.data.codeKey,
+                captchaData:response.data.captchaData,
+            });
+            console.log(that.state.captchaData);
+        });
+    }
+    // setCodeKey(codeKey)
+    // {
+    //     this.setState({
+    //        codeKey:codeKey
+    //     });
+    // }
+
+    render(){
+        // var codeKey;
+
 
         // NetUtil.get('https://guangdiu.com/api/getlist.php',{"count":10})
         //     .then((responseData)=>{
@@ -41,7 +58,7 @@ export default class LotusItem extends Component {
             <View style={styles.container}>
                 <View style={styles.textArea}>
                     <View style={styles.topArea}>
-                        <Image style={styles.headImage} source={{uri:this.props.headPortrait}}>
+                        <Image style={styles.headImage} source={{uri:this.state.captchaData}}>
 
                         </Image>
                         <View style={styles.infoArea}>

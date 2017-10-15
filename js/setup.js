@@ -5,8 +5,10 @@ import {
     View,
     Dimensions,
     ListView,
+    Image,
+    TextInput,
 } from 'react-native';
-
+import NetUtil from './Util/NetUtil'
 import Toolbar from './view/toolbar'
 import ItemView from './view/LotusItem'
 import {PullList} from 'react-native-pull'
@@ -16,13 +18,29 @@ export default class setup extends Component {
         super(props);
         this.state={
             dataSource:new ListView.DataSource({rowHasChanged:(r1,r2)=>r1!=r2}),
+            codeKey:'',
+            captchaData:'',
         }
+    }
+    componentWillMount(){
+        var that=this;
+        NetUtil.getVerificationCode().then((response)=>{
+            that.setState({
+                codeKey:response.data.codeKey,
+                captchaData:response.data.captchaData,
+            });
+            console.log(that.state.captchaData);
+        });
     }
     render() {
         return (
             <View style={styles.container}>
                 <Toolbar/>
+                <Image source={{uri:this.state.captchaData}} style={{height:150,width:width}}>
+                </Image>
+                <TextInput >
 
+                </TextInput>
                 <ItemView name="qqq" title="eee">
 
                 </ItemView>

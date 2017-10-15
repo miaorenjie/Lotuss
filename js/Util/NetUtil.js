@@ -9,8 +9,8 @@ export default class NetUtil{
         var date=new Date();
         var dateStr=date.getTime();
         console.log("时间"+dateStr);
-        var randomStr='asdqwe';
-        var token=SHA256('timestamp='+dateStr+'key='+randomStr);
+        var randomStr='qq';
+        var token=SHA256('timestamp='+dateStr+'key='+randomStr+'mzSx42jMB6sXrH6P6EcZDgZr');
         var map={
             timestamp:dateStr,
             key:randomStr,
@@ -18,6 +18,11 @@ export default class NetUtil{
         };
 
         return map;
+    }
+    static getVerificationCode()
+    {
+        var map=NetUtil.signature();
+        return NetUtil.get(NetUtil.HOST_URL+NetUtil.LOGIN_CODE_URL,null,{'ts':map.timestamp,'key':map.key,'token':map.token});
     }
     static get(url, params, headers){
         if (params) {
