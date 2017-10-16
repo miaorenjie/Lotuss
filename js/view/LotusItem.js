@@ -29,14 +29,6 @@ export default class LotusItem extends Component {
 
     }
     componentWillMount(){
-        var that=this;
-        NetUtil.getVerificationCode().then((response)=>{
-            that.setState({
-                codeKey:response.data.codeKey,
-                captchaData:response.data.captchaData,
-            });
-            console.log(that.state.captchaData);
-        });
     }
     // setCodeKey(codeKey)
     // {
@@ -58,7 +50,7 @@ export default class LotusItem extends Component {
             <View style={styles.container}>
                 <View style={styles.textArea}>
                     <View style={styles.topArea}>
-                        <Image style={styles.headImage} source={{uri:this.state.captchaData}}>
+                        <Image style={styles.headImage} source={{}}>
 
                         </Image>
                         <View style={styles.infoArea}>

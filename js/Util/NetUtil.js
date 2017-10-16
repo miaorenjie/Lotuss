@@ -1,9 +1,14 @@
 import React,{Component} from 'react';
 import SHA256 from 'crypto-js/sha256';
-
+import JSEncrypt from './JSEncrypt'
 export default class NetUtil{
     static HOST_URL='https://my.xiyoumobile.com';
     static LOGIN_CODE_URL='/api/login/code';
+    static LOGIN_SUBMIT_URL='/api/login/submit';
+    static PUBLIC_KEY= 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDnT//1WweiluU1NZvjV3W3yFh2' +
+        'HaLfs5VosT5n5eIyhb1wI7PYpNVb5jJAnVn9UfZSc6Jq/hHByxSrBb2uIm2yeONT' +
+        'FHHcfX3boneL8lEolOpoh/5FVWX9Wmsj/8MMene7qfpPDKEAqSe6n9zVqxFMoGER' +
+        '1pkxy/9sl1G+uYLX9QIDAQAB'
 
     static signature(){
         var date=new Date();
@@ -16,13 +21,32 @@ export default class NetUtil{
             key:randomStr,
             token:token,
         };
-
         return map;
+    }
+    static login(verificationCode,userName,passWord,codeKey){
+        var encrypt=new JSEncrypt();
+        encrypt.setPublicKey(NetUtil.PUBLIC_KEY);
+        var enData=new Object();
+        for(var key in passWord)
+            enData[key]=encrypt.encrypt(passWord[key]);
+        var map=NetUtil.signature();
+        return(
+            NetUtil.post(NetUtil.HOST_URL+NetUtil.LOGIN_SUBMIT_URL,
+                {'username':userName,
+                    'password':enData,
+                    'code':verificationCode,
+                    'codeKey':codeKey,
+                    'ts':map.timestamp,
+                    'key':map.key,
+                    'token':map.token})
+        )
     }
     static getVerificationCode()
     {
         var map=NetUtil.signature();
+
         return NetUtil.get(NetUtil.HOST_URL+NetUtil.LOGIN_CODE_URL,null,{'ts':map.timestamp,'key':map.key,'token':map.token});
+
     }
     static get(url, params, headers){
         if (params) {
